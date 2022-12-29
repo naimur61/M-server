@@ -114,7 +114,6 @@ async function run() {
       app.put('/postLike/:id', async (req, res) => {
          const id = req.params;
          const query = { _id: ObjectId(id) }
-         // const filter = await postCollection.findOne(query);
          const like = req.body.react;
          const options = { upsert: true };
          const updateDoc = {
@@ -124,7 +123,21 @@ async function run() {
          };
          const result = await postCollection.updateOne(query, updateDoc, options);
          res.send(result);
+      })
 
+
+      app.put('/postComments/:id', async (req, res) => {
+         const id = req.params;
+         const filter = { _id: ObjectId(id) };
+         const comment = req.body;
+         const options = { upsert: true };
+         const updateDoc = {
+            $set: {
+               comments: comment
+            },
+         };
+         const result = await postCollection.updateOne(filter, updateDoc, options);
+         res.send(result);
       })
 
    }
