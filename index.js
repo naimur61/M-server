@@ -57,20 +57,19 @@ async function run() {
 
 
       // create User 
-      // app.post('/users', async (req, res) => {
-      //    const user = req.body;
-      //    const email = user.email;
-      //    const query = { email: email };
-      //    const find = await usersCollection.findOne(query);
+      app.post('/users', async (req, res) => {
+         const user = req.body;
+         const email = user.email;
+         const query = { email: email };
+         const find = await usersCollection.findOne(query);
 
-      //    if (find) {
-      //       const token = jwt.sign({ email }, process.env.ACCESS_TOKEN);
-      //       return res.send({ accessToken: token });
-      //    };
+         if (find) {
+            return res.send({ message: 'user already register.' });
+         };
 
-      //    const result = await usersCollection.insertOne(user);
-      //    res.send(result);
-      // })
+         const result = await usersCollection.insertOne(user);
+         res.send(result);
+      })
 
       // Create Post 
       app.post('/posts', async (req, res) => {
@@ -99,6 +98,13 @@ async function run() {
          res.send(result);
       })
 
+      // Get Bikes  By Email
+      app.get('/users', async (req, res) => {
+         const email = req.query.email;
+         const query = { email: email }
+         const result = await usersCollection.findOne(query);
+         res.send(result);
+      })
 
       // Get posts  By Email
       // app.get('/posts', verifyJWT, async (req, res) => {
