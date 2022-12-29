@@ -90,6 +90,17 @@ async function run() {
          res.send(posts)
       })
 
+
+      // Get post By id
+      app.get('/posts/:id', async (req, res) => {
+         const id = req.params.id;
+         const query = { _id: ObjectId(id) };
+         const result = await postCollection.findOne(query);
+         console.log(result);
+         res.send(result);
+      })
+
+
       // Get posts  By Email
       // app.get('/posts', verifyJWT, async (req, res) => {
       //    const email = req.query.email;
@@ -109,7 +120,7 @@ async function run() {
       //    res.send(bikes);
       // })
 
-      /*  <--------------------------------------Like & Comment ----------------------------------------------> */
+      /*  <-------------------------------------- Like & Comment ----------------------------------------------> */
 
       app.put('/postLike/:id', async (req, res) => {
          const id = req.params;
