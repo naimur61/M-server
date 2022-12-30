@@ -98,7 +98,7 @@ async function run() {
          res.send(result);
       })
 
-      // Get Bikes  By Email
+      // Get User  By Email
       app.get('/users', async (req, res) => {
          const email = req.query.email;
          const query = { email: email }
@@ -106,24 +106,30 @@ async function run() {
          res.send(result);
       })
 
-      // Get posts  By Email
-      // app.get('/posts', verifyJWT, async (req, res) => {
-      //    const email = req.query.email;
-      //    const decodedEmail = req.decoded?.email;
-      //    if (email !== decodedEmail) {
-      //       return res.status(403).send({ message: 'Forbidden Access' });
-      //    }
-      //    const query = { sellerEmail: email }
-      //    const result = await bikeCollection.find(query).toArray();
-      //    res.send(result);
-      // })
+      // Update User 
+      app.put('/users/:id', async (req, res) => {
+         const id = req.params;
+         const filter = { _id: ObjectId(id) };
+         const body = req.body.userObj;
+         const options = { upsert: true };
+         const updateDoc = {
+            $set: {
+               body
+            },
+         };
+         const result = await postCollection.updateOne(filter, updateDoc, options);
+         res.send(result);
+      })
 
       // Get Top Posts 
-      // app.get('/topPosts', verifyJWT, async (req, res) => {
-      //    const query = { productStatus: "Advertise" }
-      //    const bikes = await bikeCollection.find(query).toArray();
-      //    res.send(bikes);
-      // })
+      app.get('/topPosts', async (req, res) => {
+         const query = {};
+         const option = {
+            sort: { reaction: -1 }
+         }
+         const posts = await postCollection.find(query, option).limit(3).toArray();
+         res.send(posts)
+      })
 
       /*  <-------------------------------------- Like & Comment ----------------------------------------------> */
 
